@@ -5,7 +5,7 @@ namespace ProductApi.Repositories.Implementations;
 
 public class ProductRepository : IProductRepository
 {
-    private static List<Product> _products = new()
+    private static readonly List<Product> _products = new()
     {
         new Product { Id = 1, Name = "Mouse inalámbrico", Price = 3999.99m },
         new Product { Id = 2, Name = "Teclado mecánico", Price = 8299.50m },
@@ -19,15 +19,9 @@ public class ProductRepository : IProductRepository
         new Product { Id = 10, Name = "Impresora multifunción", Price = 73900.00m }
     };
 
-    public List<Product> GetAllProducts()
-    {
-        return _products;
-    }
+    public List<Product> GetAllProducts() => _products;
 
-    public Product? GetProductById(int id)
-    {
-        return _products.FirstOrDefault(p => p.Id == id);
-    }
+    public Product? GetProductById(int id) => _products.FirstOrDefault(p => p.Id == id);
 
     public void AddProduct(Product product)
     {
@@ -48,5 +42,12 @@ public class ProductRepository : IProductRepository
     public void DeleteProduct(Product product)
     {
         _products.Remove(product);
+    }
+
+    public List<Product> SearchProductsByName(string name)
+    {
+        return _products
+            .Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
+            .ToList();
     }
 }
